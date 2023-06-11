@@ -1,0 +1,26 @@
+# This is for argocd. Install Argocd in your cluster, follow the docs in your bookmark, 
+# then apply this file and also push it to the respective repository
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-argo-application
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/argoproj/argocd-example-apps.git
+    targetRevision: HEAD
+    path: dev # path to the repository you want to track
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: my-app
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+    automated:
+      selfHeal: true # automatic sync
+      prune: true
+
